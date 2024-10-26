@@ -34,13 +34,13 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       working-directory: infra_app
-      run: terraform plan -backend-config="bucket=${{ secrets.GCS_TF_BUCKET }}"
+      run: terraform plan 
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
      # On push to main, build or change infrastructure according to Terraform configuration files     
     - name: Terraform Apply
       working-directory: infra_app
-      run: terraform apply -auto-approve -backend-config="bucket=${{ secrets.GCS_TF_BUCKET }}"
+      run: terraform apply -auto-approve
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}

@@ -8,14 +8,14 @@ steps:
 - name: 'Initialize Terraform'
   script: |
     terraform init
-  working-directory: ./gcp_web_app/infra_app
+  dir: ./gcp_web_app/infra_app
 
 - name: 'Plan Terraform Changes'
   script: |
-    terraform plan -var="project_id=your-project-id" -var="region=your-region"
-  working-directory: ./gcp_web_app/infra_app
+    terraform plan
+  dir: ./gcp_web_app/infra_app
 
 - name: 'Apply Terraform Changes'
   script: |
-    terraform apply -auto-approve -var="project_id=your-project-id" -var="region=your-region"
-  working-directory: ./gcp_web_app/infra_app
+    terraform apply -auto-approve
+  dir: ./gcp_web_app/infra_app

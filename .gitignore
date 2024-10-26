@@ -41,3 +41,5 @@ tf_sa.json
 
 # Ignore .old files
 *.old
+
+.terraform.lock.hcl

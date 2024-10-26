@@ -110,6 +110,6 @@ module "gke" {
       "default-node-pool",
     ]
   }
-  depends_on = [module.gcp_vpc]
+  depends_on = [module.gke_vpc]
 }
 ### test###

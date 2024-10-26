@@ -1,5 +1,5 @@
 module "gke_cluster" {
-  source            = "./modules/gke"
+  source            = "../modules/gke"
   project_id        = var.project_id
   region            = var.region
   cluster_name      = "contoso"

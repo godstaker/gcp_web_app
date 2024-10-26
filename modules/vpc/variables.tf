@@ -16,5 +16,5 @@ variable "routing_mode" {
 variable "delete_default_routes_on_create" {
   description = "delete default routes"
   type        = bool
-  value        = true
+  value       = true
 }

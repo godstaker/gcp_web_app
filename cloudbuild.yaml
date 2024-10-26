@@ -1,17 +1,21 @@
 steps:
 - name: 'Install Terraform'
-  image: 'hashicorp/terraform:latest'
+  script: |
+    wget -q -O - https://releases.hashicorp.com/terraform/latest/terraform_$(uname -s)_$(uname -m) -O terraform
+    chmod +x terraform
+  working-directory: ./gcp_web_app/infra_app
+
+- name: 'Initialize Terraform'
   script: |
     terraform init
+  working-directory: ./gcp_web_app/infra_app
 
 - name: 'Plan Terraform Changes'
-  image: 'hashicorp/terraform:latest'
   script: |
-    terraform plan
+    terraform plan -var="project_id=your-project-id" -var="region=your-region"
   working-directory: ./gcp_web_app/infra_app
 
 - name: 'Apply Terraform Changes'
-  image: 'hashicorp/terraform:latest'
   script: |
-    terraform apply -auto-approve
+    terraform apply -auto-approve -var="project_id=your-project-id" -var="region=your-region"
   working-directory: ./gcp_web_app/infra_app

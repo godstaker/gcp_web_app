@@ -37,6 +37,7 @@ jobs:
       run: terraform plan 
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        TF_VAR_gcs_tf_bucket: ${{ secrets.GCS_TF_BUCKET }}
 
      # On push to main, build or change infrastructure according to Terraform configuration files     
     - name: Terraform Apply
@@ -44,3 +45,4 @@ jobs:
       run: terraform apply -auto-approve
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        TF_VAR_gcs_tf_bucket: ${{ secrets.GCS_TF_BUCKET }}

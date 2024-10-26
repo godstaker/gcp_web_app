@@ -1,0 +1,43 @@
+name: Terraform Lint Check
+
+# Run this workflow on pull requests to the main branch
+on:
+  pull_request:
+    branches:
+      - main  # Update to match your default branch
+
+jobs:
+  lint:
+    name: Terraform Lint Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Terraform
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0  # Adjust the version if necessary
+
+      # Step 3: Install tflint
+      - name: Install tflint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
+      # Step 4: Run tflint
+      - name: Run tflint
+        run: tflint
+        working-directory: ./path-to-terraform-files  # Update if your Terraform files are not in the root
+
+      # Optional Step 5: Terraform Format Check
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+        working-directory: infra_app
+
+      # Optional Step 6: Terraform Validate
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: infra_app

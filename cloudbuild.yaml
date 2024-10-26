@@ -3,7 +3,7 @@ steps:
   script: |
     wget -q -O - https://releases.hashicorp.com/terraform/latest/terraform_$(uname -s)_$(uname -m) -O terraform
     chmod +x terraform
-  working-directory: ./gcp_web_app/infra_app
+  dir: ./gcp_web_app/infra_app
 
 - name: 'Initialize Terraform'
   script: |

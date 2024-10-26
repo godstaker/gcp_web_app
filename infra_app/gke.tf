@@ -35,7 +35,7 @@ module "gke" {
   name                       = "webapp"
   region                     = var.region
   zones                      = ["europe-west2-a", "europe-west2-b"]
-  network                    = module.gke_vpc.network_name
+  network                    = module.gke_vpc.vpc_network_name
   subnetwork                 = "subnet-1"
   ip_range_pods              = "webapp-01-pods"
   ip_range_services          = "webapp-01-services"

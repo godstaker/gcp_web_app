@@ -1,18 +1,19 @@
 options:
-  logging: CLOUD_LOGGING_ONLY  # Use Cloud Logging only
+  logging: CLOUD_LOGGING_ONLY
 
 steps:
-  # Step 1: Install Terraform
+  # Step 1: Install tools and Terraform
   - name: 'ubuntu:latest'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
+        apt-get update && apt-get install -y curl wget unzip
         wget -q -O terraform.zip https://releases.hashicorp.com/terraform/$(curl -s https://releases.hashicorp.com/terraform/ | grep -oP 'terraform_\K[0-9.]+(?=</a>)' | head -1)/terraform_$(uname -s)_$(uname -m).zip
         unzip terraform.zip
         chmod +x terraform
-        mv terraform /workspace/terraform  # Move to /workspace for later use
-        rm terraform.zip  # Clean up zip file
+        mv terraform /workspace/terraform
+        rm terraform.zip
 
   # Step 2: Initialize Terraform
   - name: 'ubuntu:latest'

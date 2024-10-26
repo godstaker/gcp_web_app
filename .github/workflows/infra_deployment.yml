@@ -4,7 +4,6 @@ on:
   push:
     branches:
     - main
-  pull_request:
 
 jobs:
   terraform:
@@ -35,7 +34,7 @@ jobs:
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       working-directory: infra_app
-      run: terraform plan
+      run: terraform plan -out=tfplan
       env:
         GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 

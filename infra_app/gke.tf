@@ -1,5 +1,5 @@
 module "gcp_vpc" {
-  source = "../modules/gcp_vpc"
+  source = "../modules/vpc"
 
   vpc_name        = "gke-vpc"
   vpc_description = "for gke cluster"

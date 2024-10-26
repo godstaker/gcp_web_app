@@ -1,0 +1,30 @@
+steps:
+  # Step 1: Install Terraform
+  - name: 'ubuntu:latest'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        wget -q -O terraform.zip https://releases.hashicorp.com/terraform/$(curl -s https://releases.hashicorp.com/terraform/ | grep -oP 'terraform_\K[0-9.]+(?=</a>)' | head -1)/terraform_$(uname -s)_$(uname -m).zip
+        unzip terraform.zip
+        chmod +x terraform
+        mv terraform /workspace/terraform  # Move to /workspace for later use
+        rm terraform.zip  # Clean up zip file
+
+  # Step 2: Initialize Terraform
+  - name: 'ubuntu:latest'
+    dir: '/gcp_web_app/infra_app'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        /workspace/terraform init
+
+  # Step 3: Apply Terraform
+  - name: 'ubuntu:latest'
+    dir: '/gcp_web_app/infra_app'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        /workspace/terraform apply -auto-approve

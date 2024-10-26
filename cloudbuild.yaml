@@ -1,34 +1,17 @@
-options:
-  logging: CLOUD_LOGGING_ONLY
-
 steps:
-  # Step 1: Install tools and Terraform
-  - name: 'ubuntu:latest'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        apt-get update && apt-get install -y curl wget unzip
-        wget -q -O terraform.zip https://releases.hashicorp.com/terraform/$(curl -s https://releases.hashicorp.com/terraform/ | grep -oP 'terraform_\K[0-9.]+(?=</a>)' | head -1)/terraform_$(uname -s)_$(uname -m).zip
-        unzip terraform.zip
-        chmod +x terraform
-        mv terraform /workspace/terraform
-        rm terraform.zip
+- name: 'Install Terraform'
+  image: 'hashicorp/terraform:latest'
+  script: |
+    terraform init
 
-  # Step 2: Initialize Terraform
-  - name: 'ubuntu:latest'
-    dir: '/gcp_web_app/infra_app'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        /workspace/terraform init
+- name: 'Plan Terraform Changes'
+  image: 'hashicorp/terraform:latest'
+  script: |
+    terraform plan
+  working-directory: ./gcp_web_app/infra_app
 
-  # Step 3: Apply Terraform
-  - name: 'ubuntu:latest'
-    dir: '/gcp_web_app/infra_app'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        /workspace/terraform apply -auto-approve
+- name: 'Apply Terraform Changes'
+  image: 'hashicorp/terraform:latest'
+  script: |
+    terraform apply -auto-approve
+  working-directory: ./gcp_web_app/infra_app

@@ -1,8 +1,7 @@
-module "gcp_vpc" {
+module "gke_vpc" {
   source = "../modules/vpc"
 
-  vpc_name        = "gke-vpc"
-  vpc_description = "for gke cluster"
+  vpc_network_name = "gke-vpc"
 
   subnets = [
     {
@@ -36,7 +35,7 @@ module "gke" {
   name                       = "webapp"
   region                     = var.region
   zones                      = ["europe-west2-a", "europe-west2-b"]
-  network                    = module.gcp_vpc.network
+  network                    = module.gke_vpc.self_link
   subnetwork                 = "subnet-1"
   ip_range_pods              = "webapp-01-pods"
   ip_range_services          = "webapp-01-services"

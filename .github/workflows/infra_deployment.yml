@@ -1,42 +1,45 @@
-name: Terraform GCP Workflow
+name: 'Terraform CI'
 
 on:
   push:
     branches:
-      - main  # Change this to your default branch
+    - main
+  pull_request:
 
 jobs:
   terraform:
+    name: 'Terraform'
     runs-on: ubuntu-latest
 
+    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+    defaults:
+      run:
+        shell: bash
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
 
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}  # Your GCP project ID
-          service_account_key: ${{ secrets.GCP_SA_KEY }}  # Base64 encoded service account key
-          export_default_credentials: true  # Export the credentials for later use
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1        
 
-      - name: Install Terraform
-        run: |
-          echo "Installing Terraform..."
-          TERRAFORM_VERSION=$(curl -s https://releases.hashicorp.com/terraform/ | grep -oP 'terraform_\K[0-9.]+(?=</a>)' | head -1)
-          wget -q -O terraform.zip https://releases.hashicorp.com/terraform/$TERRAFORM_VERSION/terraform_$TERRAFORM_VERSION_linux_amd64.zip
-          unzip terraform.zip
-          sudo mv terraform /usr/local/bin/
-          terraform -version
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform init
+      env:
+        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-      - name: Terraform Init
-        run: |
-          echo "Initializing Terraform..."
-          cd infra  # Change to the infra directory
-          terraform init
+    # Generates an execution plan for Terraform
+    - name: Terraform Plan
+      run: terraform plan
+      env:
+        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
-      - name: Terraform Plan
-        run: |
-          echo "Planning Terraform changes..."
-          cd infra  # Change to the infra directory
-          terraform plan
+      # On push to main, build or change infrastructure according to Terraform configuration files
+      # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
+      env:
+        GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}

@@ -1,5 +1,6 @@
 options:
   logging: CLOUD_LOGGING_ONLY  # Use Cloud Logging only
+
 steps:
   # Step 1: Install Terraform
   - name: 'ubuntu:latest'

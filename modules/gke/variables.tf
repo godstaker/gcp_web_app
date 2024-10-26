@@ -23,6 +23,12 @@ variable "machine_type" {
   description = "The machine type for the cluster nodes"
 }
 
+variable "node_machine_type" {
+  description = "Machine type for nodes in the default node pool"
+  type        = string
+  default     = "e2-medium"
+}
+
 variable "network_name" {
   type        = string
   description = "The name of the VPC network"

@@ -29,6 +29,13 @@ jobs:
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
 
+    # Initialize a new or existing Terraform working directory by creating initial files
+      - name: Terraform Init
+        working-directory: infra_app
+        run: terraform init -backend-config="bucket=${{ secrets.GCS_TF_BUCKET }}"
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
       # Step 3: Install tflint
       - name: Install tflint
         run: |
